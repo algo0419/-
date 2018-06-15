@@ -1,0 +1,52 @@
+import csv
+f = open('6._2015년_혼잡도.csv')
+
+data = csv.reader(f)
+next(data)
+next(data)
+data = list(data)
+pivot = []
+result = []
+name = input('궁금한 역 이름을 입력해주세요 : ')
+date = input('무슨 요일이 궁금하신가요? : ')
+
+if '월요일' or '화요일' or '수요일' or '목요일' or '금요일' in date :
+    date = '평일'
+    
+print(date)
+
+for row in data :
+    if name in row[3] and date in row[0] :
+        for i in range(5,int(len(row))) : 
+            if row[i] == '' :
+                pass
+            else :
+                pivot.append(int(row[i]))
+        break
+print(pivot)
+       
+mn = 100000
+for row in data :
+    print(row)
+    s = 0
+    for i in range(5, len(row)) :
+        if row[i] == '' :
+            pass
+        else :
+            row[i] = int(row[i])
+            tmp = (row[i] - pivot[i-5]) ** 2
+            s = s + tmp
+           
+    if s < mn and (name not in row[3] and date not in row[0]) :
+        result = []
+        for i in range(5, len(row)) :
+            result.append(row[i])
+        mn = s            
+        result_name = row [0] + '의 ' + row[3] + '역'
+                       
+import matplotlib.pyplot as plt
+plt.rc('font', family = 'Malgun Gothic')
+plt.plot(pivot, label = name)
+plt.plot(result, label = result_name)
+plt.legend()
+plt.show()
